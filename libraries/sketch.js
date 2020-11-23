@@ -1,4 +1,4 @@
-var fft, mic, recorder, songFile;
+var fft, mic, recorder, songFile, soundFile;
 var state = 0;
 
 function setup() {
@@ -9,14 +9,23 @@ function setup() {
   fft = new p5.FFT();
   fft.setInput(mic);
   getAudioContext().resume();
+
+
   //Button set up
   button = createButton('click me');
   button.position(0, 0);}
   button.mousePressed(startRec);
+  mic = new p5.AudioIn();
+  mic.start();
+  mic.start();
+  //create sound recorder
   recorder = new p5.SoundRecorder();
+  //connect the mic to the recorder
   recorder.setInput(mic);
+  // this sound file will be used to
+  // playback & save the recording
   soundFile = new p5.SoundFile();
-  text('Enable mic and click the mouse to begin recording', 20, 20);
+  text('keyPress to record', 20, 20);
 
 // make sure user enabled the mic
 function touchStarted() { getAudioContext().resume(); } 
@@ -72,23 +81,18 @@ function startRec(){
 
     // record to our p5.SoundFile
     recorder.record(soundFile);
-
+    background(255,0,0);
     text('Recording!', 20, 20);
     state++;
   }
   else if (state === 1) {
+    background(0,255,0);
 
     // stop recorder and
     // send result to soundFile
     recorder.stop();
 
     text('Stopped', 20, 20);
-    state++;
-  }
-
-  else if (state === 2) {
-    soundFile.play(); // play the result!
-    save(soundFile, 'mySound.wav');
     state++;
   }
 
