@@ -1,17 +1,35 @@
-let fft, mic, recorder, songFile;
+var fft, mic, recorder, songFile;
 var state = 0;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  //FFT Set up
   mic = new p5.AudioIn();
   mic.start();
   fft = new p5.FFT();
   fft.setInput(mic);
-}
+  getAudioContext().resume();
+  //Button set up
+  button = createButton('click me');
+  button.position(0, 0);}
+  button.mousePressed(startRec);
+  recorder = new p5.SoundRecorder();
+  recorder.setInput(mic);
+  soundFile = new p5.SoundFile();
+  text('Enable mic and click the mouse to begin recording', 20, 20);
 
+// make sure user enabled the mic
 function touchStarted() { getAudioContext().resume(); } 
 
+//function keyPressed() {
+  // make sure user enabled the mic
 
+//}
+
+
+
+
+//FFT analyzer
 function draw() {
   background(0);
   let spectrum = fft.analyze();
@@ -33,6 +51,8 @@ function draw() {
   
 console.log("Bass: "+bass+" lowMid: "+lowMid+" mid: "+mid+" highMid: "+highMid+" treble: "+treble);
 
+//FFT Visualization
+
 beginShape();
 stroke(0, 255, 0);
 noFill();
@@ -45,74 +65,36 @@ vertex(x, y);
 endShape();
 }
 
+//Recording functionality
 
-
-///Can't figure out how to record audio. There is this js code to create a button and when you click it, it records audio.
-//But when I add the button code into the setup, it makes all the other functionality disappear.
-//where can I add this code to get it to record audio AND show the FTT analysis?
-
-//var mic, recorder, soundFile;
-//var state = 0;
-
-//function setup() {
-//  createCanvas(600,600);
-//  background(200);
-  // create an audio in
-  
-//	button = createButton('click me');
-//  button.position(19, 19);
-//  button.mousePressed(startRec);
-//  mic = new p5.AudioIn();
-
-  // prompts user to enable their browser mic
-
-
-//  mic.start();
-//  mic.start();
-
-  // create a sound recorder
-  //recorder = new p5.SoundRecorder();
-
-  // connect the mic to the recorder
-  //recorder.setInput(mic);
-
-  // this sound file will be used to
-  // playback & save the recording
-  //soundFile = new p5.SoundFile();
-
- // text('keyPress to record', 20, 20);
-//}
-
-//function keyPressed() {
-  // make sure user enabled the mic
-
-//}
-
-//function startRec(){
-//  if (state === 0 && mic.enabled) {
+function startRec(){
+  if (state === 0 && mic.enabled) {
 
     // record to our p5.SoundFile
-//    recorder.record(soundFile);
+    recorder.record(soundFile);
 
-//    background(255,0,0);
-//    text('Recording!', 20, 20);
-//    state++;
-//  }
-//  else if (state === 1) {
-//    background(0,255,0);
+    text('Recording!', 20, 20);
+    state++;
+  }
+  else if (state === 1) {
 
     // stop recorder and
     // send result to soundFile
-//    recorder.stop();
+    recorder.stop();
 
-//    text('Stopped', 20, 20);
-//    state++;
-//  }
+    text('Stopped', 20, 20);
+    state++;
+  }
 
-//  else if (state === 2) {
-//    soundFile.play(); // play the result!
-//    save(soundFile, 'mySound.wav');
-//    state++;
-//  }
+  else if (state === 2) {
+    soundFile.play(); // play the result!
+    save(soundFile, 'mySound.wav');
+    state++;
+  }
 
-//} 
+  else if (state === 2) {
+    soundFile.play(); // play the result!
+    save(soundFile, 'mySound.wav');
+    state++;
+  }
+}
