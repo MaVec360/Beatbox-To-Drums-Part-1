@@ -1,4 +1,4 @@
-var fft, mic, recorder, songFile, soundFile, key, noteNames,loop,column;
+var fft, mic, recorder, songFile, soundFile, key, noteNames,loop,column, metronome, tempo, playPauseIcon, playButton, tempoChangeButtons;
 var state = 0;
 var bgcolor;
 
@@ -152,3 +152,54 @@ Tone.Transport.on("stop", () => {
     document.querySelector("tone-step-sequencer").setAttribute("highlight", "-1");
   }, 100);
 });
+
+
+///set up metronome:
+
+var metronome = new Metronome();
+var tempo = document.getElementById('tempo');
+tempo.textContent = metronome.tempo;
+
+var playPauseIcon = document.getElementById('play-pause-icon');
+
+var playButton = document.getElementById('play-button');
+playButton.addEventListener('click', function() {
+    metronome.startStop();
+
+    if (metronome.isRunning) {
+        playPauseIcon.className = 'pause';
+    }
+    else {
+        playPauseIcon.className = 'play';
+    }
+
+});
+
+var tempoChangeButtons = document.getElementsByClassName('tempo-change');
+for (var i = 0; i < tempoChangeButtons.length; i++) {
+    tempoChangeButtons[i].addEventListener('click', function() {
+        metronome.tempo += parseInt(this.dataset.change);
+        tempo.textContent = metronome.tempo;
+    });
+}
+
+
+//when the energey of a certain frequency is triggered, return sample sound
+
+//let sampler = new Tone.Sampler({“kickdrum”: KICK.wav});
+//}
+//Sampler.toMaster();
+
+//function when() {
+//	bass= fft.getEngery(“bass”)>100;
+//	sampler.triggerAttack(“kickdrum”);
+//}
+
+//function when(){
+//	bass= fft.getEngery(“bass”)<100;
+//	sampletriggerRelease();
+
+//function setup() {
+
+
+//}
